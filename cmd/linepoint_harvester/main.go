@@ -70,7 +70,7 @@ func takePoints(id string, pwd string, codes []string) ([]string, []string) {
 				chromedp.SetValue("#id", id, chromedp.NodeVisible),
 				chromedp.SetValue("#passwd", pwd, chromedp.NodeVisible),
 				chromedp.Click(".MdBtn03Login", chromedp.NodeEnabled),
-				chromedp.Sleep(10*time.Millisecond),
+				chromedp.Sleep(1000*time.Millisecond),
 				chromedp.WaitReady("body"),
 				chromedp.Location(&text),
 			)
@@ -78,7 +78,7 @@ func takePoints(id string, pwd string, codes []string) ([]string, []string) {
 			err = chromedp.Run(chromeCtx,
 				chromedp.Navigate("https://points.line.me/pointcode?pincode="+code),
 				chromedp.Click(".MdBtn01", chromedp.NodeEnabled),
-				chromedp.Sleep(10*time.Millisecond),
+				chromedp.Sleep(1000*time.Millisecond),
 				chromedp.WaitReady("body"),
 				chromedp.Location(&text),
 			)
