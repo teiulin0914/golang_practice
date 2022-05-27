@@ -66,10 +66,15 @@ func takePoints(id string, pwd string, codes []string) ([]string, []string) {
 		if i == 0 {
 			err = chromedp.Run(chromeCtx,
 				chromedp.Navigate("https://points.line.me/pointcode?pincode="+code),
-				chromedp.Click(".MdBtn01", chromedp.NodeEnabled),
-				chromedp.SetValue("#id", id, chromedp.NodeVisible),
-				chromedp.SetValue("#passwd", pwd, chromedp.NodeVisible),
-				chromedp.Click(".MdBtn03Login", chromedp.NodeEnabled),
+				chromedp.Sleep(100*time.Millisecond),
+				chromedp.WaitEnabled(".MdBtn01"),
+				chromedp.Click(".MdBtn01"),
+				chromedp.Sleep(100*time.Millisecond),
+				chromedp.WaitVisible("#id"),
+				chromedp.SetValue("#id", id),
+				chromedp.SetValue("#passwd", pwd),
+				chromedp.WaitEnabled(".MdBtn03Login"),
+				chromedp.Click(".MdBtn03Login"),
 				chromedp.Sleep(1000*time.Millisecond),
 				chromedp.WaitReady("body"),
 				chromedp.Location(&text),
@@ -77,7 +82,9 @@ func takePoints(id string, pwd string, codes []string) ([]string, []string) {
 		} else {
 			err = chromedp.Run(chromeCtx,
 				chromedp.Navigate("https://points.line.me/pointcode?pincode="+code),
-				chromedp.Click(".MdBtn01", chromedp.NodeEnabled),
+				chromedp.Sleep(100*time.Millisecond),
+				chromedp.WaitEnabled(".MdBtn01"),
+				chromedp.Click(".MdBtn01"),
 				chromedp.Sleep(1000*time.Millisecond),
 				chromedp.WaitReady("body"),
 				chromedp.Location(&text),
@@ -88,9 +95,17 @@ func takePoints(id string, pwd string, codes []string) ([]string, []string) {
 			errorCodes = append(errorCodes, code)
 			fmt.Println(",[Error]")
 
-		} else if !strings.Contains(text, "complete") {
+			if i == 0 {
+				log.Fatal("首筆失敗！請至 https://points.line.me/pointcode/ 手動領取，確認輸入資料無誤。")
+			}
+
+		} else if !strings.Contains(text, "complete") && !strings.Contains(text, "compleate") { // LINE 網址打錯字
 			failedCodes = append(failedCodes, code)
 			fmt.Println(",[Failed]")
+
+			if i == 0 {
+				log.Fatal("首筆失敗！請至 https://points.line.me/pointcode/ 手動領取，確認輸入資料無誤。")
+			}
 
 		} else {
 			fmt.Println(",[Succeed]")

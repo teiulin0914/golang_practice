@@ -7,6 +7,10 @@
 $ go build .
 ```
 
+## Before running
+1. 安裝 Chrome 瀏覽器
+2. 至 https://points.line.me/pointcode/ 手動領取一次 LINE POINT，先行閱讀官方同意事項
+
 ## Run
 1. 建立檔名為 `codes` 的文字檔，並填入欲領取的 LINE POINTS code (一行一筆)。
 2. 將 `codes` 移至執行檔 `linepoint_harvester` 相同路徑下。
